@@ -25,12 +25,73 @@ export const createProperty = async (req, res) => {
 
 export const getAllProperties = async (req, res) => {
   try {
-    const properties = await Property.find()
+    const {
+      search,
+      propertyType,
+      location,
+      minPrice,
+      maxPrice,
+      bedrooms,
+      status,
+      page = 1,
+      limit = 10,
+    } = req.query;
+
+    const query = {};
+
+    if (search) {
+      query.$or = [
+        { title: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } },
+        { location: { $regex: search, $options: 'i' } },
+      ];
+    }
+
+    if (propertyType) {
+      query.propertyType = propertyType;
+    }
+
+    if (location) {
+      query.location = { $regex: location, $options: 'i' };
+    }
+
+    if (minPrice || maxPrice) {
+      query.price = {};
+
+      if (minPrice) {
+        query.price.$gte = Number(minPrice);
+      }
+
+      if (maxPrice) {
+        query.price.$lte = Number(maxPrice);
+      }
+    }
+
+    if (bedrooms) {
+      query.bedrooms = Number(bedrooms);
+    }
+
+    if (status) {
+      query.status = status;
+    }
+
+    const currentPage = Number(page);
+    const pageLimit = Number(limit);
+    const skip = (currentPage - 1) * pageLimit;
+
+    const total = await Property.countDocuments(query);
+    const properties = await Property.find(query)
       .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(pageLimit)
       .populate('owner', 'fullName email');
 
     return res.status(200).json({
-      message: 'Properties fetched successfully',
+      success: true,
+      count: properties.length,
+      total,
+      page: currentPage,
+      pages: Math.ceil(total / pageLimit),
       properties,
     });
   } catch (error) {
