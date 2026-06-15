@@ -11,6 +11,8 @@ import Properties from '../pages/Properties.jsx';
 import PropertyDetails from '../pages/PropertyDetails.jsx';
 import Register from '../pages/Register.jsx';
 import SavedProperties from '../pages/SavedProperties.jsx';
+import AdminRoute from './AdminRoute.jsx';
+import ProtectedRoute from './ProtectedRoute.jsx';
 
 function AppRoutes() {
   return (
@@ -22,10 +24,14 @@ function AppRoutes() {
           <Route path="/properties/:id" element={<PropertyDetails />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/saved" element={<SavedProperties />} />
-          <Route path="/admin" element={<AdminDashboard />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/saved" element={<SavedProperties />} />
+          </Route>
+          <Route element={<AdminRoute />}>
+            <Route path="/admin" element={<AdminDashboard />} />
+          </Route>
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
