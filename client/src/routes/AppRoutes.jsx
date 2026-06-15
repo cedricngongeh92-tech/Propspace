@@ -1,0 +1,36 @@
+import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import MainLayout from '../layouts/MainLayout.jsx';
+import AdminDashboard from '../pages/AdminDashboard.jsx';
+import Dashboard from '../pages/Dashboard.jsx';
+import Home from '../pages/Home.jsx';
+import Login from '../pages/Login.jsx';
+import NotFound from '../pages/NotFound.jsx';
+import Profile from '../pages/Profile.jsx';
+import Properties from '../pages/Properties.jsx';
+import PropertyDetails from '../pages/PropertyDetails.jsx';
+import Register from '../pages/Register.jsx';
+import SavedProperties from '../pages/SavedProperties.jsx';
+
+function AppRoutes() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/properties" element={<Properties />} />
+          <Route path="/properties/:id" element={<PropertyDetails />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/saved" element={<SavedProperties />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default AppRoutes;
