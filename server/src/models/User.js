@@ -21,6 +21,9 @@ const userSchema = new mongoose.Schema({
   phone: {
     type: String,
   },
+  profileImage: {
+    type: String,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
