@@ -1,3 +1,5 @@
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 
 const formatUserResponse = (user) => ({
@@ -8,6 +10,19 @@ const formatUserResponse = (user) => ({
   phone: user.phone,
   createdAt: user.createdAt,
 });
+
+const generateToken = (user) => {
+  return jwt.sign(
+    {
+      id: user._id,
+      role: user.role,
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: '7d',
+    }
+  );
+};
 
 export const registerUser = async (req, res) => {
   try {
@@ -21,16 +36,19 @@ export const registerUser = async (req, res) => {
       });
     }
 
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const user = await User.create({
       fullName,
       email,
-      password,
+      password: hashedPassword,
       phone,
     });
 
     return res.status(201).json({
       message: 'User registered successfully',
       user: formatUserResponse(user),
+      token: generateToken(user),
     });
   } catch (error) {
     return res.status(500).json({
@@ -52,7 +70,9 @@ export const loginUser = async (req, res) => {
       });
     }
 
-    if (user.password !== password) {
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordCorrect) {
       return res.status(400).json({
         message: 'Invalid password',
       });
@@ -61,6 +81,7 @@ export const loginUser = async (req, res) => {
     return res.status(200).json({
       message: 'User logged in successfully',
       user: formatUserResponse(user),
+      token: generateToken(user),
     });
   } catch (error) {
     return res.status(500).json({
