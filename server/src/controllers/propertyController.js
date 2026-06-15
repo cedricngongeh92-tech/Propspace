@@ -6,8 +6,13 @@ const canManageProperty = (user, property) => {
 
 export const createProperty = async (req, res) => {
   try {
+    const images = req.files
+      ? req.files.map((file) => `/uploads/properties/${file.filename}`)
+      : [];
+
     const property = await Property.create({
       ...req.body,
+      images,
       owner: req.user.id,
     });
 
@@ -140,7 +145,19 @@ export const updateProperty = async (req, res) => {
       });
     }
 
-    const updatedProperty = await Property.findByIdAndUpdate(req.params.id, req.body, {
+    const newImages = req.files
+      ? req.files.map((file) => `/uploads/properties/${file.filename}`)
+      : [];
+
+    const updateData = {
+      ...req.body,
+    };
+
+    if (newImages.length > 0) {
+      updateData.images = [...property.images, ...newImages];
+    }
+
+    const updatedProperty = await Property.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
       runValidators: true,
     });
