@@ -19,6 +19,15 @@ function PropertyDetails() {
   const [message, setMessage] = useState('');
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [inquiryForm, setInquiryForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: '',
+  });
+  const [inquiryMessage, setInquiryMessage] = useState('');
+  const [inquiryError, setInquiryError] = useState('');
+  const [submittingInquiry, setSubmittingInquiry] = useState(false);
 
   useEffect(() => {
     const fetchProperty = async () => {
@@ -83,6 +92,43 @@ function PropertyDetails() {
       setSaving(false);
     }
   };
+
+  const handleInquiryChange = (event) => {
+    setInquiryForm({
+      ...inquiryForm,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const handleInquirySubmit = async (event) => {
+    event.preventDefault();
+    setInquiryMessage('');
+    setInquiryError('');
+
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    setSubmittingInquiry(true);
+
+    try {
+      const response = await api.post(`/inquiries/property/${id}`, inquiryForm);
+      setInquiryMessage(response.data.message || 'Inquiry sent successfully');
+      setInquiryForm({
+        name: '',
+        email: '',
+        phone: '',
+        message: '',
+      });
+    } catch (err) {
+      setInquiryError(err.response?.data?.message || 'Failed to send inquiry');
+    } finally {
+      setSubmittingInquiry(false);
+    }
+  };
+
+  const ownsProperty = user && property?.owner?._id === user.id;
 
   if (loading) {
     return (
@@ -163,6 +209,58 @@ function PropertyDetails() {
             <h2>Owner</h2>
             <p>{property.owner?.fullName || 'Not available'}</p>
             <p>{property.owner?.email || 'Not available'}</p>
+          </div>
+
+          <div className="inquiry-panel">
+            <h2>Contact Owner</h2>
+            {ownsProperty ? (
+              <p>You own this property.</p>
+            ) : (
+              <form className="inquiry-form" onSubmit={handleInquirySubmit}>
+                {inquiryMessage && <p className="success-message">{inquiryMessage}</p>}
+                {inquiryError && <p className="error-message">{inquiryError}</p>}
+                <label>
+                  Name
+                  <input
+                    name="name"
+                    value={inquiryForm.name}
+                    onChange={handleInquiryChange}
+                    required
+                  />
+                </label>
+                <label>
+                  Email
+                  <input
+                    type="email"
+                    name="email"
+                    value={inquiryForm.email}
+                    onChange={handleInquiryChange}
+                    required
+                  />
+                </label>
+                <label>
+                  Phone
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={inquiryForm.phone}
+                    onChange={handleInquiryChange}
+                  />
+                </label>
+                <label>
+                  Message
+                  <textarea
+                    name="message"
+                    value={inquiryForm.message}
+                    onChange={handleInquiryChange}
+                    required
+                  />
+                </label>
+                <button type="submit" className="button primary" disabled={submittingInquiry}>
+                  {submittingInquiry ? 'Sending...' : 'Send Inquiry'}
+                </button>
+              </form>
+            )}
           </div>
         </div>
       </div>

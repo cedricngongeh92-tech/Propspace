@@ -7,6 +7,7 @@ import Dashboard from '../pages/Dashboard.jsx';
 import EditProperty from '../pages/EditProperty.jsx';
 import Home from '../pages/Home.jsx';
 import Login from '../pages/Login.jsx';
+import MyInquiries from '../pages/MyInquiries.jsx';
 import MyProperties from '../pages/MyProperties.jsx';
 import NotFound from '../pages/NotFound.jsx';
 import Profile from '../pages/Profile.jsx';
@@ -33,6 +34,7 @@ function AppRoutes() {
             <Route path="/saved" element={<SavedProperties />} />
             <Route path="/properties/create" element={<CreateProperty />} />
             <Route path="/my-properties" element={<MyProperties />} />
+            <Route path="/my-inquiries" element={<MyInquiries />} />
             <Route path="/properties/:id/edit" element={<EditProperty />} />
           </Route>
           <Route element={<AdminRoute />}>
