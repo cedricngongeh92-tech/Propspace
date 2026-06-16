@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import api from '../api/api.js';
+import { useAuth } from '../context/useAuth.js';
 
 const getImageUrl = (imagePath) => {
   const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
@@ -10,9 +11,14 @@ const getImageUrl = (imagePath) => {
 
 function PropertyDetails() {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
+  const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     const fetchProperty = async () => {
@@ -31,6 +37,52 @@ function PropertyDetails() {
 
     fetchProperty();
   }, [id]);
+
+  useEffect(() => {
+    const checkSavedProperty = async () => {
+      if (!user) {
+        setSaved(false);
+        return;
+      }
+
+      try {
+        const response = await api.get(`/favorites/${id}/check`);
+        setSaved(response.data.saved);
+      } catch (err) {
+        setSaved(false);
+      }
+    };
+
+    checkSavedProperty();
+  }, [id, user]);
+
+  const handleToggleSaved = async () => {
+    setMessage('');
+    setError('');
+
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    setSaving(true);
+
+    try {
+      if (saved) {
+        await api.delete(`/favorites/${id}`);
+        setSaved(false);
+        setMessage('Property removed from saved properties');
+      } else {
+        await api.post(`/favorites/${id}`);
+        setSaved(true);
+        setMessage('Property saved successfully');
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to update saved property');
+    } finally {
+      setSaving(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -73,6 +125,16 @@ function PropertyDetails() {
           <h1>{property.title}</h1>
           <p className="price">FCFA {Number(property.price).toLocaleString()}</p>
           <p>{property.description}</p>
+          {message && <p className="success-message">{message}</p>}
+          {error && <p className="error-message">{error}</p>}
+          <button
+            type="button"
+            className={saved ? 'button secondary' : 'button save-button'}
+            onClick={handleToggleSaved}
+            disabled={saving}
+          >
+            {saving ? 'Please wait...' : saved ? 'Remove from Saved' : 'Save Property'}
+          </button>
 
           <div className="details-grid">
             <div>

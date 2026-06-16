@@ -23,6 +23,8 @@ function Navbar() {
         {user ? (
           <>
             <NavLink to="/dashboard">Dashboard</NavLink>
+            <NavLink to="/properties/create">Add Property</NavLink>
+            <NavLink to="/my-properties">My Properties</NavLink>
             <NavLink to="/profile">Profile</NavLink>
             <NavLink to="/saved">Saved</NavLink>
             {user.role === 'admin' && <NavLink to="/admin">Admin</NavLink>}

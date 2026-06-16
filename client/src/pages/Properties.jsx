@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import api from '../api/api.js';
+import { useAuth } from '../context/useAuth.js';
 
 const initialFilters = {
   search: '',
@@ -19,6 +20,8 @@ const getImageUrl = (imagePath) => {
 };
 
 function Properties() {
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [properties, setProperties] = useState([]);
   const [filters, setFilters] = useState(initialFilters);
   const [page, setPage] = useState(1);
@@ -27,10 +30,12 @@ function Properties() {
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
 
   const fetchProperties = async (pageNumber = 1, activeFilters = filters) => {
     setLoading(true);
     setError('');
+    setMessage('');
 
     try {
       const params = {
@@ -87,6 +92,23 @@ function Properties() {
   const goToNextPage = () => {
     if (page < pages) {
       fetchProperties(page + 1, filters);
+    }
+  };
+
+  const handleSaveProperty = async (propertyId) => {
+    setMessage('');
+    setError('');
+
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    try {
+      const response = await api.post(`/favorites/${propertyId}`);
+      setMessage(response.data.message || 'Property saved successfully');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to save property');
     }
   };
 
@@ -155,6 +177,7 @@ function Properties() {
       </form>
 
       {loading && <p>Loading properties...</p>}
+      {message && <p className="success-message">{message}</p>}
       {error && <p className="error-message">{error}</p>}
       {!loading && !error && properties.length === 0 && <p>No properties found.</p>}
 
@@ -187,9 +210,18 @@ function Properties() {
                     <span>{property.bedrooms || 0} beds</span>
                     <span>{property.bathrooms || 0} baths</span>
                   </div>
-                  <Link to={`/properties/${property._id}`} className="button primary">
-                    View Details
-                  </Link>
+                  <div className="property-actions">
+                    <Link to={`/properties/${property._id}`} className="button primary">
+                      View Details
+                    </Link>
+                    <button
+                      type="button"
+                      className="button save-button"
+                      onClick={() => handleSaveProperty(property._id)}
+                    >
+                      Save
+                    </button>
+                  </div>
                 </div>
               </article>
             ))}
