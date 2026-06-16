@@ -32,6 +32,10 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
+  const updateUser = (updatedUser) => {
+    setUser(updatedUser);
+  };
+
   const checkAuth = async () => {
     const savedToken = localStorage.getItem('token');
 
@@ -67,6 +71,7 @@ export function AuthProvider({ children }) {
         register,
         logout,
         checkAuth,
+        updateUser,
       }}
     >
       {children}
