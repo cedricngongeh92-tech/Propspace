@@ -510,6 +510,50 @@ button:disabled {
   background: #e8f4f2;
 }
 
+.admin-users-container {
+  display: grid;
+  gap: 18px;
+}
+
+.admin-search-input {
+  width: min(100%, 420px);
+}
+
+.admin-users-table-wrap {
+  overflow-x: auto;
+  border: 1px solid #dce3ed;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.admin-users-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+
+.admin-users-table th,
+.admin-users-table td {
+  padding: 14px;
+  border-bottom: 1px solid #e6edf5;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.admin-users-table th {
+  color: #334155;
+  background: #f8fafc;
+  font-size: 0.9rem;
+}
+
+.admin-users-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.role-select {
+  min-width: 110px;
+}
+
 .pagination {
   display: flex;
   align-items: center;
