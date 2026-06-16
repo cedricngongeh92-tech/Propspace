@@ -90,10 +90,25 @@ textarea {
   padding: 56px 0;
 }
 
+.home-page {
+  display: grid;
+  gap: 28px;
+}
+
 .hero {
   display: grid;
-  min-height: 60vh;
+  min-height: 54vh;
   align-items: center;
+  border: 1px solid #dce3ed;
+  border-radius: 8px;
+  padding: clamp(28px, 6vw, 64px);
+  background:
+    linear-gradient(135deg, rgba(15, 118, 110, 0.12), rgba(37, 99, 235, 0.08)),
+    #ffffff;
+}
+
+.hero-content {
+  max-width: 720px;
 }
 
 .eyebrow {
@@ -135,6 +150,7 @@ p {
   padding: 10px 16px;
   cursor: pointer;
   font-weight: 700;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
 }
 
 .button.primary {
@@ -245,6 +261,11 @@ select {
 button:disabled {
   cursor: not-allowed;
   opacity: 0.55;
+}
+
+.button:disabled,
+.nav-button:disabled {
+  box-shadow: none;
 }
 
 .success-message {
@@ -404,6 +425,39 @@ button:disabled {
 
 .empty-state p {
   margin-bottom: 8px;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.feature-card,
+.not-found-card {
+  border: 1px solid #dce3ed;
+  border-radius: 8px;
+  padding: 22px;
+  background: #ffffff;
+}
+
+.feature-card p {
+  margin: 0;
+}
+
+.not-found-page {
+  display: grid;
+  min-height: 55vh;
+  place-items: center;
+}
+
+.not-found-card {
+  width: min(100%, 520px);
+  text-align: center;
+}
+
+.not-found-card .button {
+  margin: 0 auto;
 }
 
 .profile-layout {
@@ -753,24 +807,51 @@ button:disabled {
   .navbar {
     align-items: flex-start;
     flex-direction: column;
+    gap: 14px;
   }
 
   .nav-links {
     width: 100%;
+    gap: 6px;
   }
 
-  .nav-links a {
-    padding-inline: 8px;
+  .nav-links a,
+  .nav-button {
+    padding: 8px;
   }
 
   .page {
     padding: 36px 0;
   }
 
+  h1 {
+    font-size: 2.1rem;
+  }
+
+  .hero {
+    min-height: auto;
+    padding: 28px 20px;
+  }
+
   .details-layout,
   .details-grid,
   .form-grid {
     grid-template-columns: 1fr;
+  }
+
+  .filter-actions,
+  .property-actions,
+  .management-actions,
+  .actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .filter-actions .button,
+  .property-actions .button,
+  .management-actions .button,
+  .actions .button {
+    width: 100%;
   }
 
   .page-heading {

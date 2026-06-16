@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../api/api.js';
 import { useAuth } from '../context/useAuth.js';
+import { hasValidPasswordLength, isBlank } from '../utils/validation.js';
 
 function Profile() {
   const { updateUser } = useAuth();
@@ -65,6 +66,12 @@ function Profile() {
     event.preventDefault();
     setProfileMessage('');
     setError('');
+
+    if (isBlank(profileForm.fullName)) {
+      setError('Full name is required');
+      return;
+    }
+
     setUpdatingProfile(true);
 
     try {
@@ -84,8 +91,13 @@ function Profile() {
     setPasswordMessage('');
     setError('');
 
-    if (!passwordForm.newPassword) {
-      setError('New password is required');
+    if (isBlank(passwordForm.oldPassword) || isBlank(passwordForm.newPassword)) {
+      setError('Old password and new password are required');
+      return;
+    }
+
+    if (!hasValidPasswordLength(passwordForm.newPassword)) {
+      setError('New password must be at least 6 characters');
       return;
     }
 

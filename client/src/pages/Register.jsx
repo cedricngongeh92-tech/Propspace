@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/useAuth.js';
+import { hasValidPasswordLength, isBlank, isValidEmail } from '../utils/validation.js';
 
 function Register() {
   const navigate = useNavigate();
@@ -26,6 +27,22 @@ function Register() {
     event.preventDefault();
     setMessage('');
     setError('');
+
+    if (isBlank(formData.fullName) || isBlank(formData.email) || isBlank(formData.password)) {
+      setError('Full name, email, and password are required');
+      return;
+    }
+
+    if (!isValidEmail(formData.email)) {
+      setError('Please enter a valid email address');
+      return;
+    }
+
+    if (!hasValidPasswordLength(formData.password)) {
+      setError('Password must be at least 6 characters');
+      return;
+    }
+
     setSubmitting(true);
 
     try {

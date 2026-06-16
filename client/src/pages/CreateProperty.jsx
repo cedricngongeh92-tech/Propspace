@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/api.js';
+import { isBlank, isNonNegativeNumber, isPositiveNumber } from '../utils/validation.js';
 
 const initialFormData = {
   title: '',
@@ -30,13 +31,48 @@ function CreateProperty() {
   };
 
   const handleImagesChange = (event) => {
-    setImages(Array.from(event.target.files).slice(0, 5));
+    const selectedImages = Array.from(event.target.files);
+
+    if (selectedImages.length > 5) {
+      setError('You can upload a maximum of 5 images');
+      setImages(selectedImages.slice(0, 5));
+      return;
+    }
+
+    setError('');
+    setImages(selectedImages);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setMessage('');
     setError('');
+
+    if (
+      isBlank(formData.title) ||
+      isBlank(formData.description) ||
+      isBlank(formData.price) ||
+      isBlank(formData.location)
+    ) {
+      setError('Title, description, price, and location are required');
+      return;
+    }
+
+    if (!isPositiveNumber(formData.price)) {
+      setError('Price must be a positive number');
+      return;
+    }
+
+    if (!isNonNegativeNumber(formData.bedrooms) || !isNonNegativeNumber(formData.bathrooms)) {
+      setError('Bedrooms and bathrooms cannot be negative');
+      return;
+    }
+
+    if (images.length > 5) {
+      setError('You can upload a maximum of 5 images');
+      return;
+    }
+
     setSubmitting(true);
 
     try {
@@ -97,6 +133,7 @@ function CreateProperty() {
               name="price"
               value={formData.price}
               onChange={handleChange}
+              min="1"
               required
             />
           </label>
@@ -128,6 +165,7 @@ function CreateProperty() {
               name="bedrooms"
               value={formData.bedrooms}
               onChange={handleChange}
+              min="0"
             />
           </label>
           <label>
@@ -137,11 +175,12 @@ function CreateProperty() {
               name="bathrooms"
               value={formData.bathrooms}
               onChange={handleChange}
+              min="0"
             />
           </label>
           <label>
             Area
-            <input type="number" name="area" value={formData.area} onChange={handleChange} />
+            <input type="number" name="area" value={formData.area} onChange={handleChange} min="0" />
           </label>
           <label>
             Images

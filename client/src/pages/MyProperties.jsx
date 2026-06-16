@@ -70,7 +70,15 @@ function MyProperties() {
       {message && <p className="success-message">{message}</p>}
       {error && <p className="error-message">{error}</p>}
       {loading && <p>Loading your properties...</p>}
-      {!loading && properties.length === 0 && <p>You have not created any properties yet.</p>}
+      {!loading && properties.length === 0 && (
+        <div className="empty-state">
+          <h2>You have not created any properties yet</h2>
+          <p>Add your first property listing and manage it from here.</p>
+          <Link to="/properties/create" className="button primary">
+            Add Property
+          </Link>
+        </div>
+      )}
 
       {!loading && properties.length > 0 && (
         <div className="property-grid">

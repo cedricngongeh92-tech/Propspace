@@ -179,7 +179,12 @@ function Properties() {
       {loading && <p>Loading properties...</p>}
       {message && <p className="success-message">{message}</p>}
       {error && <p className="error-message">{error}</p>}
-      {!loading && !error && properties.length === 0 && <p>No properties found.</p>}
+      {!loading && !error && properties.length === 0 && (
+        <div className="empty-state">
+          <h2>No properties found</h2>
+          <p>Try adjusting your search or clearing the filters.</p>
+        </div>
+      )}
 
       {!loading && !error && properties.length > 0 && (
         <>
