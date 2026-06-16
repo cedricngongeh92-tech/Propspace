@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout.jsx';
 import AdminDashboard from '../pages/AdminDashboard.jsx';
+import AdminInquiries from '../pages/AdminInquiries.jsx';
 import AdminUsers from '../pages/AdminUsers.jsx';
 import CreateProperty from '../pages/CreateProperty.jsx';
 import Dashboard from '../pages/Dashboard.jsx';
@@ -40,6 +41,7 @@ function AppRoutes() {
           </Route>
           <Route element={<AdminRoute />}>
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/inquiries" element={<AdminInquiries />} />
             <Route path="/admin/users" element={<AdminUsers />} />
           </Route>
           <Route path="*" element={<NotFound />} />

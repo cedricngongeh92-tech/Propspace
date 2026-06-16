@@ -153,6 +153,17 @@ p {
   color: #ffffff;
 }
 
+.danger-button {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.danger-button:disabled {
+  background: #94a3b8;
+  color: #ffffff;
+  cursor: not-allowed;
+}
+
 .button.save-button {
   background: #2563eb;
   color: #ffffff;
@@ -552,6 +563,41 @@ button:disabled {
 
 .role-select {
   min-width: 110px;
+}
+
+.admin-inquiries-container {
+  display: grid;
+  gap: 18px;
+}
+
+.admin-filter-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.status-filter {
+  width: min(100%, 220px);
+}
+
+.admin-inquiry-list {
+  display: grid;
+  gap: 16px;
+}
+
+.admin-inquiry-card {
+  background: #ffffff;
+}
+
+.admin-inquiry-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 10px;
+}
+
+.admin-inquiry-details p {
+  margin: 0;
 }
 
 .pagination {
