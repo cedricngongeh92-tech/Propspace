@@ -444,6 +444,72 @@ button:disabled {
   color: #64748b;
 }
 
+.dashboard-container {
+  display: grid;
+  gap: 22px;
+}
+
+.welcome-card {
+  border: 1px solid #dce3ed;
+  border-radius: 8px;
+  padding: 24px;
+  background: #ffffff;
+}
+
+.admin-welcome {
+  border-color: #bfd9d5;
+}
+
+.stats-grid,
+.quick-action-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.admin-stats-grid {
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+}
+
+.stat-card,
+.quick-action-card {
+  border: 1px solid #dce3ed;
+  border-radius: 8px;
+  padding: 18px;
+  background: #ffffff;
+}
+
+.stat-card {
+  display: grid;
+  gap: 8px;
+}
+
+.stat-card span {
+  color: #5b667a;
+  font-weight: 700;
+}
+
+.stat-card strong {
+  color: #0f766e;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.quick-actions {
+  display: grid;
+  gap: 12px;
+}
+
+.quick-action-card {
+  color: #0f766e;
+  font-weight: 800;
+}
+
+.quick-action-card:hover {
+  border-color: #0f766e;
+  background: #e8f4f2;
+}
+
 .pagination {
   display: flex;
   align-items: center;
