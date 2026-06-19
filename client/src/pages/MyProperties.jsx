@@ -2,12 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api/api.js';
 import { useAuth } from '../context/useAuth.js';
-
-const getImageUrl = (imagePath) => {
-  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-  const baseUrl = apiUrl.replace('/api', '');
-  return `${baseUrl}${imagePath}`;
-};
+import { getImageUrl } from '../utils/imageUrl.js';
 
 function MyProperties() {
   const { user } = useAuth();

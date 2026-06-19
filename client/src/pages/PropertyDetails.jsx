@@ -2,13 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import api from '../api/api.js';
 import { useAuth } from '../context/useAuth.js';
+import { getImageUrl } from '../utils/imageUrl.js';
 import { isBlank, isValidEmail } from '../utils/validation.js';
-
-const getImageUrl = (imagePath) => {
-  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-  const baseUrl = apiUrl.replace('/api', '');
-  return `${baseUrl}${imagePath}`;
-};
 
 function PropertyDetails() {
   const { id } = useParams();
